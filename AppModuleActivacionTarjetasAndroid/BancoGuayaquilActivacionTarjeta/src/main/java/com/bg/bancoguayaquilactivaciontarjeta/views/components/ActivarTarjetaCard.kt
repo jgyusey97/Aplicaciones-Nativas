@@ -2,6 +2,7 @@
 
 package com.bg.bancoguayaquilactivaciontarjeta
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -19,20 +20,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.ActivacionTarjetasTheme
 import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.backgroundColor2
+import com.bg.bancoguayaquilactivaciontarjeta.views.components.CardItemMode
+import com.bg.bancoguayaquilactivaciontarjeta.views.modals.*
+
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.rememberCoroutineScope
+
+import androidx.compose.material3.ModalBottomSheet
+
 
 @Composable
-fun ActivacionMainUI() {
+fun ActivarTarjetaCard() {
     var tarjetasPendientes by remember { mutableStateOf(0) }
 
     // Llamada rápida a la consulta de tarjetas pendientes
     LaunchedEffect(Unit) {
         tarjetasPendientes = consultarTarjetasPendientes()
     }
-    ActivacionTarjetasTheme {
-        ActivarTarjetaCard(
+
+    ActivarTarjetaButton(
             tarjetasPendientes = tarjetasPendientes
         )
-    }
+
 
 }
 
@@ -41,21 +50,26 @@ private fun consultarTarjetasPendientes(): Int {
     return 1 // Simulación de 2 tarjetas por activar
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActivarTarjetaCard(
+fun ActivarTarjetaButton(
     tarjetasPendientes: Int
 ) {
+    var showModal by remember { mutableStateOf(false) }
+    val bottomSheetState = rememberModalBottomSheetState()
+
+    val coroutineScope = rememberCoroutineScope()
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = backgroundColor2
         ),
-        onClick = {
-            // Aquí se puede navegar al flujo de activación más adelante
-        }
+
+            onClick = { showModal = true }
+
     ) {
         Row(
             modifier = Modifier
@@ -65,7 +79,7 @@ fun ActivarTarjetaCard(
         ) {
             Box(modifier = Modifier.size(48.dp)) {
                 Icon(
-                    painter = painterResource(id = android.R.drawable.ic_lock_idle_lock),
+                    painter = painterResource(id = R.drawable.card),
                     contentDescription = "Icono de tarjeta",
                     modifier = Modifier
                         .size(48.dp)
@@ -107,13 +121,37 @@ fun ActivarTarjetaCard(
             }
         }
     }
+
+    if (showModal) {
+        ModalBottomSheet  (
+            onDismissRequest = { showModal = false },
+            sheetState = bottomSheetState,
+            containerColor = Color.Transparent // para que tu Surface controle el diseño
+        ) {
+            ActivationModal(
+                cards = listOf(
+                    CardData(
+                        number = "XXXX23",
+                        owner = "Carolina Romero",
+                        date = "",
+                        imageRes = R.drawable.avanti_card,
+                        mode = CardItemMode.DEFAULT
+                    )
+                ),
+                onClose = { showModal = false },
+                onContinue = { /* acción */ }
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ActivarTarjetaCardPreview() {
 
-ActivacionTarjetasTheme {
-    ActivarTarjetaCard(tarjetasPendientes = 2)
-}
+  ActivacionTarjetasTheme {
+      ActivarTarjetaCard()
+  }
+
+
 }

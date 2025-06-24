@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.bundles.lifecycle)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-
+    implementation("io.coil-kt:coil-compose:2.5.0")
     // Compose
     implementation(libs.bundles.compose)
     implementation(libs.compose.navigation)

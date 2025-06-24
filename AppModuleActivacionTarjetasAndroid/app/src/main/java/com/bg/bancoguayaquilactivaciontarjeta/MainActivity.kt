@@ -21,7 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.AppModuleActivacionTarjetasAndroidTheme
+import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.backgroundColor
+import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.backgroundColor2
+import com.bg.bancoguayaquilactivaciontarjeta.views.components.CardItemMode
+import com.bg.bancoguayaquilactivaciontarjeta.views.components.PendingCardItem
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = backgroundColor
                 ) {
                     PantallaPrincipalConActivacion()
                 }
@@ -106,7 +110,9 @@ fun PantallaPrincipalConActivacion() {
             OpcionItem("Solicita una tarjeta adicional", "Comparte el cupo de tu tarjeta con una adicional")
             OpcionItem("Comprar por internet", "Estado: Activo", switch = true)
             OpcionItem("Solicitar clave", "Llegará por correo y SMS", botonTexto = "Enviar")
-            ActivarTarjetaCard(tarjetasPendientes = 3)
+             ActivarTarjetaCard()
+
+
         }
     }
 }
@@ -118,7 +124,7 @@ fun OpcionItem(titulo: String, subtitulo: String, switch: Boolean = false, boton
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = backgroundColor2)
     ) {
         Row(
             modifier = Modifier
@@ -126,14 +132,16 @@ fun OpcionItem(titulo: String, subtitulo: String, switch: Boolean = false, boton
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            //Icon la inicio del boton
             Box(
                 modifier = Modifier
                     .size(40.dp)
-                    .background(Color(0xFFF0F0F0), shape = CircleShape),
+                  ,
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(id = android.R.drawable.ic_menu_info_details),
+                    painter = painterResource(id = android.R.drawable.sym_contact_card),
                     contentDescription = null
                 )
             }
@@ -167,7 +175,7 @@ fun ActivarTarjetaCardPreview() {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = backgroundColor
     ) {
         PantallaPrincipalConActivacion()
     }
