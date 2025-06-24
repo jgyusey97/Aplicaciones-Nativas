@@ -1,0 +1,11 @@
+package com.bg.bancoguayaquilcertificates.models
+
+enum class ValidationCodeType(val value: String) {
+    GENERAL("GENERAL"),
+    NEED_SAVING_ACCOUNT("NEED_SAVING_ACCOUNT"),
+    NEED_PAY("NEED_PAY"),
+    OVERDUE_DEBT("OVERDUE_DEBT"),
+    OVERDUE_OVERDRAFT_DEBT("OVERDUE_OVERDRAFT_DEBT"),
+    HAS_NOT_PRODUCT("HAS_NOT_PRODUCT"),
+    UNASSIGNED_OFFICER("UNASSIGNED_OFFICER")
+}
