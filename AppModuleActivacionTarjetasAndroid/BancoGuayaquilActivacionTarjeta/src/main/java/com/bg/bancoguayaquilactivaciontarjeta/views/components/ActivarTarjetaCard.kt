@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.ActivacionTarjetasTheme
+import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.backgroundColor2
 
 @Composable
 fun ActivacionMainUI() {
@@ -50,7 +51,7 @@ fun ActivarTarjetaCard(
             .padding(16.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF8F8F8)
+            containerColor = backgroundColor2
         ),
         onClick = {
             // Aquí se puede navegar al flujo de activación más adelante
@@ -112,7 +113,7 @@ fun ActivarTarjetaCard(
 @Composable
 fun ActivarTarjetaCardPreview() {
 
-
-        ActivarTarjetaCard(tarjetasPendientes = 2)
-
+ActivacionTarjetasTheme {
+    ActivarTarjetaCard(tarjetasPendientes = 2)
+}
 }
