@@ -16,25 +16,28 @@ import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.ActivacionTarjetasTheme
 fun ActionButton(
     text: String,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    containerColor: Color = if (enabled) Color(0xFFD40072) else Color(0xFFE0E0E0),
+    contentColor: Color = if (enabled) Color.White else Color.Gray
 ) {
     Button(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(50),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) Color(0xFFD40072) else Color(0xFFE0E0E0),
-            contentColor = if (enabled) Color.White else Color.Gray
+            containerColor = containerColor,
+            contentColor = contentColor
         ),
         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
     ) {
         Text(
             text = text,
-            fontSize = 18.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Medium
         )
     }
 }
+
 
 
 @Preview(showBackground = true)

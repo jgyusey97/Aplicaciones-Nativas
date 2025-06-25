@@ -129,18 +129,38 @@ fun ActivarTarjetaButton(
             containerColor = Color.Transparent // para que tu Surface controle el diseño
         ) {
             ActivationModal(
-                cards = listOf(
+                primaryCard =  CardData(
+                    number = "XXXX23",
+                    owner = "Carolina Romero",
+                    date =   "17/07/25",
+                    imageRes = R.drawable.avanti_card,
+                    mode = CardItemMode.CHECKABLE
+                ),
+
+                aditionalCards = listOf(
+
+
                     CardData(
                         number = "XXXX23",
                         owner = "Carolina Romero",
-                        date = "",
+                        date =   "17/07/25",
                         imageRes = R.drawable.avanti_card,
-                        mode = CardItemMode.DEFAULT
+                        mode = CardItemMode.LOCKED
+                    ),
+                    CardData(
+                        number = "XXXX23",
+                        owner = "Carolina Romero",
+                        date =   "17/07/25",
+                        imageRes = R.drawable.avanti_card,
+                        mode = CardItemMode.LOCKED
                     )
+
                 ),
                 onClose = { showModal = false },
                 onContinue = { /* acción */ }
             )
+
+
         }
     }
 }

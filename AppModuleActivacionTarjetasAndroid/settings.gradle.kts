@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "AppModuleActivacionTarjetasAndroid"
 include(":app")
 include(":BancoGuayaquilActivacionTarjeta")
+include(":BancoGuayaquilUtils")

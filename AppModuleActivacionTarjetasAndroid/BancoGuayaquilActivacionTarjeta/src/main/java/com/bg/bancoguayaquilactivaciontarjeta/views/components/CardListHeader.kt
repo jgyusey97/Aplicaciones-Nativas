@@ -30,12 +30,12 @@ fun CardListHeader(pendingCount: Int) {
                 color = backgroudColor3,
                 shape = RoundedCornerShape(37.5.dp)
             )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(start = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Tarjetas Pendientes",
+            text = "TARJETAS PENDIENTES",
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp

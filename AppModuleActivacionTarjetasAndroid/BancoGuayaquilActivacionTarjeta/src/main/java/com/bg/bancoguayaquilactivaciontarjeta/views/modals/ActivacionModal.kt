@@ -1,7 +1,12 @@
 package com.bg.bancoguayaquilactivaciontarjeta.views.modals
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
@@ -14,6 +19,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bg.bancoguayaquilactivaciontarjeta.R
+import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.backgroundColor
+import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.title1Color
+import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.title2Color
+import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.title3Color
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.*
 data class CardData(
     val number: String,
@@ -23,17 +32,30 @@ data class CardData(
     val imageRes: Int? = null,
     val mode: CardItemMode = CardItemMode.DEFAULT
 )
+
+
 @Composable
 fun ActivationModal(
-    cards: List<CardData>,
+    primaryCard: CardData? = null,
+    aditionalCards: List<CardData> = emptyList(),
     onClose: () -> Unit,
     onContinue: () -> Unit
 ) {
+    val maxCardsHeight = 320.dp // Altura máxima visible para las tarjetas
+
     Surface(
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        color = Color.White
+        color = Color.White,
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .fillMaxWidth()
+        ) {
+            // Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -43,16 +65,22 @@ fun ActivationModal(
                     text = "Portal de activación",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                 )
-                IconButton(onClick = onClose) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Cerrar"
-                    )
-                }
+
+
+                CloseCircleButton(onClick = onClose)
+
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
+            HorizontalDivider(
+                color = Color(0xFFE0E0E0),
+                thickness = 1.dp,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
 
+            Spacer(Modifier.height(8.dp))
+
+            // Badge
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -62,46 +90,123 @@ fun ActivationModal(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CardListHeader(1)
+                CardListHeader(aditionalCards.size)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
+
+
+            primaryCard?.let { card ->
+                Text(
+                    text = "TARJETA TITULAR",
+                    color = Color(0xFF0056F2),
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                PendingCardItem(
+                    cardNumber = card.number,
+                    owner = card.owner,
+                    requestedDate = card.date,
+                    imageUrl = card.imageUrl,
+                    imageRes = card.imageRes,
+                    mode = card.mode
+                )
+            }
+
+
+
+            if (!aditionalCards.isEmpty()) {
+
+                HorizontalDivider(
+                    color = Color(0xFFE0E0E0),
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
-                text = "TARJETA TITULAR",
+                text = "TARJETAS ADICIONALES",
                 color = Color(0xFF0056F2),
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.padding(start = 8.dp)
             )
 
-            cards.forEach {
-                PendingCardItem(
-                    cardNumber = it.number,
-                    owner = it.owner,
-                    requestedDate = it.date,
-                    imageUrl = it.imageUrl,
-                    imageRes = it.imageRes,
-                    mode = it.mode
-                )
+            // Lista scrollable con altura máxima
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = maxCardsHeight)
+            ) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    aditionalCards.forEachIndexed { index, card ->
+                        PendingCardItem(
+                            cardNumber = card.number,
+                            owner = card.owner,
+                            requestedDate = card.date,
+                            imageUrl = card.imageUrl,
+                            imageRes = card.imageRes,
+                            mode = card.mode
+                        )
+
+                        // Agrega separador si NO es el último elemento
+                        if (index < aditionalCards.lastIndex) {
+
+                            HorizontalDivider(
+                            color = Color(0xFFE0E0E0),
+                            thickness = 1.dp,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                            )
+                        }
+                    }
+
+                }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
 
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botones fijos
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier
+
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally)
             ) {
-                ActionButton(text = "Salir", onClick = onClose, enabled = false)
+                ActionButton(text = "Salir", onClick = onClose, containerColor = backgroundColor, contentColor = title3Color)
                 ActionButton(text = "Continuar", onClick = onContinue)
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
         }
     }
 }
+
+
+
+
+
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewActivationModal() {
     ActivationModal(
-        cards = listOf(
+        primaryCard =  CardData(
+            number = "XXXX23",
+            owner = "Carolina Romero",
+            date =   "17/07/25",
+            imageRes = R.drawable.avanti_card,
+            mode = CardItemMode.CHECKABLE
+        ),
+        aditionalCards = listOf(
             CardData(
                 number = "XXXX23",
                 owner = "Carolina Romero",
