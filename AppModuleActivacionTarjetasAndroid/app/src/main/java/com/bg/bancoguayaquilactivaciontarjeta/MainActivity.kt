@@ -110,7 +110,7 @@ fun PantallaPrincipalConActivacion() {
             OpcionItem("Solicita una tarjeta adicional", "Comparte el cupo de tu tarjeta con una adicional")
             OpcionItem("Comprar por internet", "Estado: Activo", switch = true)
             OpcionItem("Solicitar clave", "Llegará por correo y SMS", botonTexto = "Enviar")
-             ActivarTarjetaCard()
+            ActivarTarjetaButton()
 
 
         }

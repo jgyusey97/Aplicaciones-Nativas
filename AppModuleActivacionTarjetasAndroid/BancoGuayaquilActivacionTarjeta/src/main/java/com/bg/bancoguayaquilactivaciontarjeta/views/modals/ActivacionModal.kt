@@ -19,11 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bg.bancoguayaquilactivaciontarjeta.R
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.backgroundColor
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.title1Color
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.title2Color
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.title3Color
+
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.*
+import com.bg.bancoguayaquilutils.theming.BancoTheme
+import com.bg.bancoguayaquilutils.theming.BancoWrapper
+
 data class CardData(
     val number: String,
     val owner: String,
@@ -42,152 +42,157 @@ fun ActivationModal(
     onContinue: () -> Unit
 ) {
     val maxCardsHeight = 320.dp // Altura máxima visible para las tarjetas
+    BancoWrapper {
 
-    Surface(
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        color = Color.White,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-    ) {
-        Column(
+        Surface(
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+            color = Color.White,
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 12.dp)
                 .fillMaxWidth()
+                .wrapContentHeight()
         ) {
-            // Header
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Portal de activación",
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
-                )
-
-
-                CloseCircleButton(onClick = onClose)
-
-            }
-
-            Spacer(Modifier.height(8.dp))
-            HorizontalDivider(
-                color = Color(0xFFE0E0E0),
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            // Badge
-            Row(
+            Column(
                 modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(50))
-                    .background(Color(0xFFF0F5FE))
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
             ) {
-                CardListHeader(aditionalCards.size)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-
-            primaryCard?.let { card ->
-                Text(
-                    text = "TARJETA TITULAR",
-                    color = Color(0xFF0056F2),
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                PendingCardItem(
-                    cardNumber = card.number,
-                    owner = card.owner,
-                    requestedDate = card.date,
-                    imageUrl = card.imageUrl,
-                    imageRes = card.imageRes,
-                    mode = card.mode
-                )
-            }
+                // Header
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Portal de activación",
+                        style =BancoTheme.typography.headingLarge
 
 
+                    )
 
-            if (!aditionalCards.isEmpty()) {
 
+                    CloseCircleButton(onClick = onClose)
+
+                }
+
+                Spacer(Modifier.height(8.dp))
                 HorizontalDivider(
                     color = Color(0xFFE0E0E0),
                     thickness = 1.dp,
-                    modifier = Modifier.padding(vertical = 4.dp)
+                  //  modifier = Modifier.padding(vertical = 4.dp)
                 )
-            }
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-            Text(
-                text = "TARJETAS ADICIONALES",
-                color = Color(0xFF0056F2),
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-
-            // Lista scrollable con altura máxima
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = maxCardsHeight)
-            ) {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    aditionalCards.forEachIndexed { index, card ->
-                        PendingCardItem(
-                            cardNumber = card.number,
-                            owner = card.owner,
-                            requestedDate = card.date,
-                            imageUrl = card.imageUrl,
-                            imageRes = card.imageRes,
-                            mode = card.mode
-                        )
-
-                        // Agrega separador si NO es el último elemento
-                        if (index < aditionalCards.lastIndex) {
-
-                            HorizontalDivider(
-                            color = Color(0xFFE0E0E0),
-                            thickness = 1.dp,
-                            modifier = Modifier.padding(vertical = 4.dp)
-                            )
-                        }
-                    }
-
+                // Badge
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(50))
+                        .background(Color(0xFFF0F5FE))
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CardListHeader(aditionalCards.size)
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+
+                primaryCard?.let { card ->
+                    Text(
+                        text = "TARJETA TITULAR",
+                        color = BancoTheme.colors.title4,
+                        style = BancoTheme.typography.labelStrong,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    PendingCardItem(
+                        cardNumber = card.number,
+                        owner = card.owner,
+                        requestedDate = card.date,
+                        imageUrl = card.imageUrl,
+                        imageRes = card.imageRes,
+                        mode = card.mode
+                    )
+                }
+
+
+
+                if (!aditionalCards.isEmpty()) {
+
+                    HorizontalDivider(
+                        color = Color(0xFFE0E0E0),
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "TARJETAS ADICIONALES",
+                    color = BancoTheme.colors.title4,
+                    style = BancoTheme.typography.labelStrong,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+
+                // Lista scrollable con altura máxima
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = maxCardsHeight)
+                ) {
+                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                        aditionalCards.forEachIndexed { index, card ->
+                            PendingCardItem(
+                                cardNumber = card.number,
+                                owner = card.owner,
+                                requestedDate = card.date,
+                                imageUrl = card.imageUrl,
+                                imageRes = card.imageRes,
+                                mode = card.mode
+                            )
+
+                            // Agrega separador si NO es el último elemento
+                            if (index < aditionalCards.lastIndex) {
+
+                                HorizontalDivider(
+                                    color = Color(0xFFE0E0E0),
+                                    thickness = 1.dp,
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                )
+                            }
+                        }
+
+                    }
+                }
+
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botones fijos
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    ActionButton(text = "Salir", onClick = onClose, containerColor = BancoTheme.colors.background, contentColor = BancoTheme.colors.title3 )
+                    ActionButton(text = "Continuar", onClick = onContinue, containerColor = BancoTheme.colors.primary, contentColor = BancoTheme.colors.background)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
             }
-
-
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Botones fijos
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-
-                    .padding(bottom = 8.dp)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                ActionButton(text = "Salir", onClick = onClose, containerColor = backgroundColor, contentColor = title3Color)
-                ActionButton(text = "Continuar", onClick = onContinue)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
         }
     }
+
 }
 
 

@@ -16,10 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bg.bancoguayaquilactivaciontarjeta.ActivarTarjetaCard
 import com.bg.bancoguayaquilactivaciontarjeta.R
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.ActivacionTarjetasTheme
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.backgroudColor3
+import com.bg.bancoguayaquilutils.theming.BancoTheme
+
+import com.bg.bancoguayaquilutils.theming.BancoWrapper
 
 @Composable
 fun CardListHeader(pendingCount: Int) {
@@ -27,7 +27,7 @@ fun CardListHeader(pendingCount: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = backgroudColor3,
+                color = BancoTheme.colors.background3,
                 shape = RoundedCornerShape(37.5.dp)
             )
             .padding(start = 20.dp),
@@ -36,10 +36,10 @@ fun CardListHeader(pendingCount: Int) {
     ) {
         Text(
             text = "TARJETAS PENDIENTES",
-            style = MaterialTheme.typography.labelLarge.copy(
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.2.sp
-            )
+            style = BancoTheme.typography.headingMedium
+
+
+
         )
 
         Box(contentAlignment = Alignment.TopEnd) {
@@ -71,7 +71,7 @@ fun CardListHeader(pendingCount: Int) {
 @Composable
 fun CardListHeaderPreview() {
 
-    ActivacionTarjetasTheme {
+    BancoWrapper {
         CardListHeader(1)
     }
 

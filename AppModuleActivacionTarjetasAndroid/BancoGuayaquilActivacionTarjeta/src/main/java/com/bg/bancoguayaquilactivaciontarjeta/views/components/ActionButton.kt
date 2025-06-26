@@ -9,34 +9,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bg.bancoguayaquilactivaciontarjeta.ActivarTarjetaCard
-import com.bg.bancoguayaquilactivaciontarjeta.ui.theme.ActivacionTarjetasTheme
+
+import com.bg.bancoguayaquilutils.theming.BancoTheme
+import com.bg.bancoguayaquilutils.theming.BancoWrapper
+
 
 @Composable
 fun ActionButton(
     text: String,
     onClick: () -> Unit,
-    enabled: Boolean = true,
-    containerColor: Color = if (enabled) Color(0xFFD40072) else Color(0xFFE0E0E0),
-    contentColor: Color = if (enabled) Color.White else Color.Gray
+    containerColor: Color,
+    contentColor: Color
 ) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        shape = RoundedCornerShape(50),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = contentColor
-        ),
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium
-        )
+    BancoWrapper {
+        Button(
+            onClick = onClick,
+            shape = RoundedCornerShape(50),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = containerColor,
+                contentColor = contentColor
+            ),
+            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+        ) {
+            Text(
+                text = text,
+                style = BancoTheme.typography.subtitle
+            )
+        }
     }
 }
+
 
 
 
@@ -44,13 +46,9 @@ fun ActionButton(
 @Composable
 fun ActionButtonEnablePreview() {
 
-    ActivacionTarjetasTheme {
-        ActionButton(
-            text = "Salir",
-            onClick = {},
-            enabled = false
+    BancoTheme {
+        ActionButton(text = "Salir", onClick = {}, containerColor = BancoTheme.colors.background, contentColor = BancoTheme.colors.title3 )
 
-        )
     }
 
 
@@ -60,13 +58,10 @@ fun ActionButtonEnablePreview() {
 @Composable
 fun ActionButtonDisablePreview() {
 
-    ActivacionTarjetasTheme {
-        ActionButton(
-            text = "Continuar",
-            onClick = {},
+    BancoTheme {
+        ActionButton(text = "Continuar", onClick = {}, containerColor = BancoTheme.colors.primary, contentColor = BancoTheme.colors.background)
 
 
-        )
     }
 
 
