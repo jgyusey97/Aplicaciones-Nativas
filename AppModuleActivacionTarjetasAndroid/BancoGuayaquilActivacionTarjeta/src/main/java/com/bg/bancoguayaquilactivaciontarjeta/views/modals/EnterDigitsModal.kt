@@ -1,5 +1,5 @@
 package com.bg.bancoguayaquilactivaciontarjeta.views.modals
-import SecureInputField
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -99,7 +99,7 @@ fun EnterDigitsModal(
                                 text = "Escribe los 6 últimos dígitos de tu tarjeta titular",
                                 color = BancoTheme.colors.title,
                                 style = BancoTheme.typography.headingMedium,
-                                modifier = Modifier.padding(start = 8.dp)
+                                modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 14.dp)
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             PendingCardItem(

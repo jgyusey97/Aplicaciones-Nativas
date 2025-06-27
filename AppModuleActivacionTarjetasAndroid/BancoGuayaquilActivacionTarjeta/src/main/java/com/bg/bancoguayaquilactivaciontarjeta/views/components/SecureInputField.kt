@@ -1,6 +1,9 @@
+package com.bg.bancoguayaquilactivaciontarjeta.views.modals
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -12,6 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
@@ -21,6 +25,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
 import com.bg.bancoguayaquilactivaciontarjeta.R
+
+object NoTextToolbar : TextToolbar {
+    override val status: TextToolbarStatus
+        get() = TextToolbarStatus.Hidden
+
+    override fun showMenu(
+        rect: androidx.compose.ui.geometry.Rect,
+        onCopyRequested: (() -> Unit)?,
+        onPasteRequested: (() -> Unit)?,
+        onCutRequested: (() -> Unit)?,
+        onSelectAllRequested: (() -> Unit)?
+    ) {
+        // Do nothing
+    }
+
+    override fun hide() {
+        // Do nothing
+    }
+}
 
 @Composable
 fun SecureInputField(
@@ -70,18 +93,21 @@ fun SecureInputField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp),
+                        interactionSource = remember { MutableInteractionSource() },
                         decorationBox = { innerTextField ->
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.CenterStart
-                            ) {
-                                if (value.isEmpty()) {
-                                    Text(
-                                        text = placeholder,
-                                        style = BancoTheme.typography.body.copy(color = placeholderColor)
-                                    )
+                            CompositionLocalProvider(LocalTextToolbar provides NoTextToolbar) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.CenterStart
+                                ) {
+                                    if (value.isEmpty()) {
+                                        Text(
+                                            text = placeholder,
+                                            style = BancoTheme.typography.body.copy(color = placeholderColor)
+                                        )
+                                    }
+                                    innerTextField()
                                 }
-                                innerTextField()
                             }
                         }
                     )
