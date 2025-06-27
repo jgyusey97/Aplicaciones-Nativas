@@ -1,8 +1,7 @@
 // Estructura inicial del módulo activaciontarjeta
 
 package com.bg.bancoguayaquilactivaciontarjeta
-
-
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -18,20 +17,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import com.bg.bancoguayaquilactivaciontarjeta.views.components.CardItemMode
-import com.bg.bancoguayaquilactivaciontarjeta.views.modals.*
-
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
+import com.bg.bancoguayaquilactivaciontarjeta.navigation.ActivationFlowHost
 
-import androidx.compose.material3.ModalBottomSheet
+import com.bg.bancoguayaquilactivaciontarjeta.navigation.ActivationStep
+import com.bg.bancoguayaquilactivaciontarjeta.viewmodel.FlowControllerViewModel
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
 
-
 @Composable
 fun ActivarTarjetaButton() {
+
     var tarjetasPendientes by remember { mutableStateOf(0) }
 
     // Llamada rápida a la consulta de tarjetas pendientes
@@ -40,7 +39,9 @@ fun ActivarTarjetaButton() {
     }
 
     ActivarTarjeta(
-            tarjetasPendientes = tarjetasPendientes
+            tarjetasPendientes = tarjetasPendientes,
+
+
         )
 
 
@@ -55,11 +56,10 @@ private fun consultarTarjetasPendientes(): Int {
 @Composable
 fun ActivarTarjeta(
     tarjetasPendientes: Int
+
 ) {
     var showModal by remember { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState()
-
-    val coroutineScope = rememberCoroutineScope()
+    val showFlow = remember { mutableStateOf(false) }
     BancoWrapper {
         Card(
             modifier = Modifier
@@ -70,7 +70,12 @@ fun ActivarTarjeta(
                 containerColor = BancoTheme.colors.background2
             ),
 
-            onClick = { showModal = true }
+            onClick = {
+
+                showFlow.value = true
+
+
+            }
 
         ) {
             Row(
@@ -125,68 +130,22 @@ fun ActivarTarjeta(
                        color = BancoTheme.colors.body
                     )
                 }
+
             }
         }
+        if (showFlow.value) {
+            ActivationFlowHost(onCloseFlow = {
+                showFlow.value = false
+            })
+        }
+
+        // ActivationFlowHost(viewModel = flowViewModel)
 
     }
 
 
-    if (showModal) {
-
-        BancoWrapper{
-            ModalBottomSheet  (
-                onDismissRequest = { showModal = false },
-                sheetState = bottomSheetState,
-                containerColor = Color.Transparent // para que tu Surface controle el diseño
-            ) {
-                ActivationModal(
-                    primaryCard =  CardData(
-                        number = "XXXX23",
-                        owner = "Carolina Romero",
-                        date =   "17/07/25",
-                        imageRes = R.drawable.avanti_card,
-                        mode = CardItemMode.CHECKABLE
-                    ),
-
-                    aditionalCards = listOf(
 
 
-                        CardData(
-                            number = "XXXX23",
-                            owner = "Carolina Romero",
-                            date =   "17/07/25",
-                            imageRes = R.drawable.avanti_card,
-                            mode = CardItemMode.LOCKED
-                        ),
-                        CardData(
-                            number = "XXXX23",
-                            owner = "Carolina Romero",
-                            date =   "17/07/25",
-                            imageRes = R.drawable.avanti_card,
-                            mode = CardItemMode.LOCKED
-                        )
-
-                    ),
-                    onClose = { showModal = false },
-                    onContinue = { /* acción */ }
-                )
-
-
-            }
-        }
-
-        }
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ActivarTarjetaCardPreview() {
-
-  BancoWrapper {
-
-      ActivarTarjetaButton()
-  }
-
-
-}

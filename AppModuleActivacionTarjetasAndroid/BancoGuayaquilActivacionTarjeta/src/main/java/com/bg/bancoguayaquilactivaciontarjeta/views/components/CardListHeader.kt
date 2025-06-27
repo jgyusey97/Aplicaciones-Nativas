@@ -26,11 +26,12 @@ fun CardListHeader(pendingCount: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(45.dp)
             .background(
                 color = BancoTheme.colors.background3,
                 shape = RoundedCornerShape(37.5.dp)
             )
-            .padding(start = 20.dp),
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

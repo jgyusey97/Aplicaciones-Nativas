@@ -13,7 +13,8 @@ data class BancoColorScheme(
     val title3:Color,
     val title4: Color,
     val body: Color,
-    val body2: Color
+    val body2: Color,
+    val body3: Color
 )
 
 
@@ -28,7 +29,8 @@ val LightColorScheme = BancoColorScheme(
     title3 = Color(0xFF2A244F),
     title4 = Color(0xFF0F62FE),
     body = Color(0xFF6F6F6F),
-    body2 = Color(0xFFBDBDBD)
+    body2 = Color(0xFFBDBDBD),
+    body3 =Color(0xFFF3F3F3)
 
 
 

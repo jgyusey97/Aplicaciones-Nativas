@@ -1,8 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-
+    id("com.google.dagger.hilt.android") version "2.50"
+    kotlin("kapt")
 }
+
 
 android {
     namespace = "com.bg.bancoguayaquilactivaciontarjeta"
@@ -37,6 +39,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+        }
+    }
+
 }
 
 dependencies {
@@ -47,6 +56,12 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
+
+
     // Compose
     implementation(libs.bundles.compose)
     implementation(libs.compose.navigation)
