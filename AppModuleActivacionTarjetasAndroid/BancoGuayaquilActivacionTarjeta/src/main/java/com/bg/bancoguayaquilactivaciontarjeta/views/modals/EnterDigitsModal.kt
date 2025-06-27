@@ -102,6 +102,10 @@ fun EnterDigitsModal(
                                 modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 14.dp)
                             )
                             Spacer(modifier = Modifier.height(12.dp))
+                            InfoMessageBanner(
+                                message = "Para activar tu tarjeta adicional, necesitamos los datos de la tarjeta titular"
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
                             PendingCardItem(
                                 cardNumber = card.number,
                                 owner = card.owner,

@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 data class BancoColorScheme(
 
     val primary: Color,
+    val primarySoft:Color,
     val background: Color,
     val background2:Color,
     val background3:Color,
@@ -21,6 +22,7 @@ data class BancoColorScheme(
 val LightColorScheme = BancoColorScheme(
 
     primary = Color(0xFFD2006E),
+    primarySoft =Color(0xFFFDF2F7),
     background= Color(0xFFFFFFFF),
     background2 =Color(0xFFF9F9F9),
     background3 = Color(0xFFF0F5FE),

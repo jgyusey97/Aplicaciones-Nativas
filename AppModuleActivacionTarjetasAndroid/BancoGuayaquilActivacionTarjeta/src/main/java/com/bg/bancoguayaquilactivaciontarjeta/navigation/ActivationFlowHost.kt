@@ -1,6 +1,8 @@
 package com.bg.bancoguayaquilactivaciontarjeta.navigation
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bg.bancoguayaquilactivaciontarjeta.viewmodel.FlowControllerViewModel
 import com.bg.bancoguayaquilactivaciontarjeta.views.modals.SelectedCardModal
@@ -8,8 +10,11 @@ import com.bg.bancoguayaquilactivaciontarjeta.views.modals.CardData
 import com.bg.bancoguayaquilactivaciontarjeta.R
 import com.bg.bancoguayaquilactivaciontarjeta.views.FaceVerificationScreen
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.CardItemMode
+import com.bg.bancoguayaquilactivaciontarjeta.views.components.InfoMessageBanner
+import com.bg.bancoguayaquilactivaciontarjeta.views.components.SuccessMessagePopup
 import com.bg.bancoguayaquilactivaciontarjeta.views.modals.EnterDigitsModal
 import com.bg.bancoguayaquilactivaciontarjeta.views.modals.FullScreenModal
+import com.bg.bancoguayaquilutils.theming.BancoTheme
 
 @Composable
 fun ActivationFlowHost( onCloseFlow: () -> Unit,viewModel: FlowControllerViewModel = viewModel()) {
@@ -44,7 +49,9 @@ fun ActivationFlowHost( onCloseFlow: () -> Unit,viewModel: FlowControllerViewMod
                     )
                 ),*/
                 onClose = {
+                    viewModel.resetFlow()
                     onCloseFlow()
+
                 },
                 onContinue = {
                      viewModel.goTo(ActivationStep.FACE_VERIFICATION)
@@ -87,15 +94,48 @@ fun ActivationFlowHost( onCloseFlow: () -> Unit,viewModel: FlowControllerViewMod
                     mode = CardItemMode.DEFAULT
                 ),
                 onClose = {
+                    viewModel.resetFlow()
                     onCloseFlow()
                 },
                 onContinue = {
-
+                    viewModel.goTo(ActivationStep.SUCCESS)
                 })
 
 
         }
 
+        ActivationStep.SUCCESS -> {
+
+
+
+             FullScreenModal(
+
+                 isOpen = true
+             ) {
+
+
+                 SuccessMessagePopup(
+                     title = "Tarjeta activada exitosamente",
+                     message = buildAnnotatedString {
+                         append("Tus tarjeta ya está lista.\nAgrégala a tu ")
+                         withStyle(BancoTheme.typography.labelStrong.toSpanStyle()) {
+                             append("billetera digital")
+                         }
+                         append(" y llévalas en tu celular.")
+                     },
+                     buttonText = "Entendido",
+                     onClose = {
+
+                         viewModel.resetFlow()
+                         onCloseFlow()
+                     }
+
+
+                 )
+             }
+
+
+        }
 
 
         else -> {

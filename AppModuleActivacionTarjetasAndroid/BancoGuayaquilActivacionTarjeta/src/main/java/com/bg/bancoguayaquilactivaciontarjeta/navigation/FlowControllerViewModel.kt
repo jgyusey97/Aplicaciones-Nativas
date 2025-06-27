@@ -11,4 +11,8 @@ class FlowControllerViewModel : ViewModel() {
     fun goTo(next: ActivationStep) {
         step.value = next
     }
+
+    fun resetFlow() {
+        step.value = ActivationStep.SELECT_CARD // o el paso inicial deseado
+    }
 }
