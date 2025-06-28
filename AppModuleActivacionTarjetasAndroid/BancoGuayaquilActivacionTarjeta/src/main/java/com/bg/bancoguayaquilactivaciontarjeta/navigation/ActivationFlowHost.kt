@@ -1,13 +1,16 @@
 package com.bg.bancoguayaquilactivaciontarjeta.navigation
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bg.bancoguayaquilactivaciontarjeta.viewmodel.FlowControllerViewModel
 import com.bg.bancoguayaquilactivaciontarjeta.views.modals.SelectedCardModal
 import com.bg.bancoguayaquilactivaciontarjeta.views.modals.CardData
 import com.bg.bancoguayaquilactivaciontarjeta.R
+import com.bg.bancoguayaquilactivaciontarjeta.viewmodel.PendientesActivacionViewModel
 import com.bg.bancoguayaquilactivaciontarjeta.views.FaceVerificationScreen
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.CardItemMode
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.InfoMessageBanner
@@ -17,129 +20,119 @@ import com.bg.bancoguayaquilactivaciontarjeta.views.modals.FullScreenModal
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 
 @Composable
-fun ActivationFlowHost( onCloseFlow: () -> Unit,viewModel: FlowControllerViewModel = viewModel()) {
-    val step by viewModel.step.collectAsState()
-    var showModal by remember { mutableStateOf(true) } // <- control del modal
+fun ActivationFlowHost(
+    onCloseFlow: () -> Unit,
+    flowViewModel: FlowControllerViewModel = viewModel(),
+    pendientesViewModel: PendientesActivacionViewModel = viewModel()
+) {
+    val step by flowViewModel.step.collectAsState()
+    val tarjetas by pendientesViewModel.tarjetas.collectAsState()
 
+    // Cargar data de prueba solo una vez
+    LaunchedEffect(Unit) {
+        pendientesViewModel.cargarEscenario("titularYAdicional")
+    }
+    val titular = tarjetas.find { it.princiadicio == "P" }
+    val adicionales = tarjetas.filter { it.princiadicio == "A" }
     when (step) {
         ActivationStep.SELECT_CARD -> {
-            SelectedCardModal(
-                primaryCard = CardData(
-                    number = "XXXX23",
-                    owner = "Carolina Romero",
-                    date = "17/07/25",
-                    imageRes = R.drawable.avanti_card,
-                    mode = CardItemMode.DEFAULT
-                ),
-                /*
-                aditionalCards = listOf(
-                    CardData(
-                        number = "XXXX23",
-                        owner = "Carolina Romero",
-                        date = "17/07/25",
-                        imageRes = R.drawable.avanti_card,
-                        mode = CardItemMode.DEFAULT
-                    ),
-                    CardData(
-                        number = "XXXX23",
-                        owner = "Carolina Romero",
-                        date = "17/07/25",
-                        imageRes = R.drawable.avanti_card,
-                        mode = CardItemMode.CHECKABLE
-                    )
-                ),*/
-                onClose = {
-                    viewModel.resetFlow()
-                    onCloseFlow()
 
+
+            SelectedCardModal(
+                primaryCard = titular?.let {
+                    CardData(
+                        number = it.tarjeta,
+                        owner = it.nombrePlastico,
+                        date = "17/07/25",
+                        imageRes = R.drawable.avanti_card
+                    )
+                },
+                aditionalCards = adicionales.map {
+                    CardData(
+                        number = it.tarjeta,
+                        owner = it.nombrePlastico,
+                        date = "17/07/25",
+                        imageRes = R.drawable.avanti_card,
+
+                    )
+                },
+                onClose = {
+                    flowViewModel.resetFlow()
+                    onCloseFlow()
                 },
                 onContinue = {
-                     viewModel.goTo(ActivationStep.FACE_VERIFICATION)
+                    flowViewModel.goTo(ActivationStep.FACE_VERIFICATION)
                 }
             )
-
-
         }
 
-
-
         ActivationStep.FACE_VERIFICATION -> {
-
-            FullScreenModal(
-                 isOpen = true
-            ) {
-
+            FullScreenModal(isOpen = true) {
                 FaceVerificationScreen(
-                    imageRes = R.drawable.logo_facephi, // usa una imagen dummy
+                    imageRes = R.drawable.logo_facephi,
                     onClose = {
-
-                        viewModel.goTo(ActivationStep.ENTER_DIGITS)
+                        flowViewModel.goTo(ActivationStep.ENTER_DIGITS)
                     }
                 )
             }
-
-
-
         }
 
-
         ActivationStep.ENTER_DIGITS -> {
+            val titular = tarjetas.find { it.princiadicio == "P" }
 
-            EnterDigitsModal (
-                primaryCard = CardData(
-                    number = "XXXX23",
-                    owner = "Carolina Romero",
-                    date = "17/07/25",
-                    imageRes = R.drawable.avanti_card,
-                    mode = CardItemMode.DEFAULT
-                ),
+            EnterDigitsModal(
+                primaryCard = titular?.let {
+                    CardData(
+                        number = it.tarjeta,
+                        owner = it.nombrePlastico,
+                        date = "17/07/25",
+                        imageRes = R.drawable.avanti_card
+                    )
+                },
+
+                aditionalCards = adicionales.map {
+                    CardData(
+                        number = it.tarjeta,
+                        owner = it.nombrePlastico,
+                        date = "17/07/25",
+                        imageRes = R.drawable.avanti_card,
+
+                        )
+                },
                 onClose = {
-                    viewModel.resetFlow()
+                    flowViewModel.resetFlow()
                     onCloseFlow()
                 },
                 onContinue = {
-                    viewModel.goTo(ActivationStep.SUCCESS)
-                })
-
-
+                    flowViewModel.goTo(ActivationStep.SUCCESS)
+                }
+            )
         }
 
         ActivationStep.SUCCESS -> {
 
+            SuccessMessagePopup(
 
 
-             FullScreenModal(
+                title = "Tarjeta activada exitosamente",
+               message = buildAnnotatedString {
+                    append("Tus tarjetas ya están listas.\nAgrégalas a tu ")
 
-                 isOpen = true
-             ) {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append("billetera digital")
+                    }
 
-
-                 SuccessMessagePopup(
-                     title = "Tarjeta activada exitosamente",
-                     message = buildAnnotatedString {
-                         append("Tus tarjeta ya está lista.\nAgrégala a tu ")
-                         withStyle(BancoTheme.typography.labelStrong.toSpanStyle()) {
-                             append("billetera digital")
-                         }
-                         append(" y llévalas en tu celular.")
-                     },
-                     buttonText = "Entendido",
-                     onClose = {
-
-                         viewModel.resetFlow()
-                         onCloseFlow()
-                     }
-
-
-                 )
-             }
-
-
+                    append(" y llévalas en tu celular.")
+                },
+                buttonText = "Entendido",
+                onClose = {
+                    flowViewModel.resetFlow()
+                    onCloseFlow()
+                }
+            )
         }
 
-
-        else -> {
-            // Placeholder por si se expande luego
-        }
+        else -> {}
     }
 }
+

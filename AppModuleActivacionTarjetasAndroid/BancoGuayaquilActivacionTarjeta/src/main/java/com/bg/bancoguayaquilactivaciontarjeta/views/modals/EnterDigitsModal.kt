@@ -9,6 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.*
@@ -29,6 +33,7 @@ data class CarData(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterDigitsModal(
+    aditionalCards: List<CardData> = emptyList(),
     primaryCard: CardData? = null,
     onClose: () -> Unit,
     onContinue: () -> Unit
@@ -96,35 +101,83 @@ fun EnterDigitsModal(
 
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
-                                text = "Escribe los 6 últimos dígitos de tu tarjeta titular",
+                                text = buildAnnotatedString {
+                                    append("Escribe los ")
+                                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append("6 últimos dígitos")
+                                    }
+                                    append(" de tu\n")
+                                    append("tarjeta titular")
+                                },
                                 color = BancoTheme.colors.title,
                                 style = BancoTheme.typography.headingMedium,
                                 modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 14.dp)
                             )
+
                             Spacer(modifier = Modifier.height(12.dp))
+                            /*
                             InfoMessageBanner(
                                 message = "Para activar tu tarjeta adicional, necesitamos los datos de la tarjeta titular"
                             )
-                            Spacer(modifier = Modifier.height(12.dp))
+                            */
+
                             PendingCardItem(
                                 cardNumber = card.number,
                                 owner = card.owner,
                                 requestedDate = card.date,
                                 imageUrl = card.imageUrl,
                                 imageRes = card.imageRes,
-                                mode = card.mode
+
                             )
                         }
 
+                       if(primaryCard==null){
 
-                        Spacer(Modifier.height(12.dp))
+
+                           Text(
+                               text = buildAnnotatedString {
+                                   append("Escribe los ")
+                                   withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                       append("6 últimos dígitos")
+                                   }
+                                   append(" de tu\n")
+                                   append("tarjeta titular")
+                               },
+                               color = BancoTheme.colors.title,
+                               style = BancoTheme.typography.headingMedium,
+                               modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 14.dp)
+                           )
+
+
+                           if (aditionalCards.isNotEmpty()) {
+
+                               if(aditionalCards.size >1){
+                                   InfoMessageBanner(
+                                       message = "Se activarán automáticamente todas las tarjetas adicionales seleccionadas."
+                                   )
+
+                               }else{
+                                   InfoMessageBanner(
+                                       message = "Para activar tu tarjeta adicional, necesitamos los datos de la tarjeta titular"
+                                   )
+                               }
+                           }
+
+
+
+
+
+                       }
+
+
+                        Spacer(Modifier.height(14.dp))
 
 
                         SecureInputField(
                             value = text,
                             onValueChange = { text = it },
                             isError = false,
-                           // errorMessage = "Número de tarjeta inválido. Verifica los 6 últimos dígitos."
+                            // errorMessage = "Número de tarjeta inválido. Verifica los 6 últimos dígitos."
                         )
 
 
@@ -142,7 +195,7 @@ fun EnterDigitsModal(
                                 contentColor = BancoTheme.colors.title3
                             )
                             ActionButton(
-                                text = "Continuar",
+                                text = "Activar Tarjeta ",
                                 onClick = onContinue,
                                 containerColor = BancoTheme.colors.primary,
                                 contentColor = BancoTheme.colors.background
@@ -163,7 +216,7 @@ fun EnterDigitsModal(
 @Preview(showBackground = true)
 @Composable
 fun PreviewEnterDigitsModal() {
-  EnterDigitsModal(
+    EnterDigitsModal(
 
         onClose = {},
         onContinue = {}

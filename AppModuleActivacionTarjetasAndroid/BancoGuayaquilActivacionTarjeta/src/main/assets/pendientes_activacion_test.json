@@ -1,0 +1,83 @@
+{
+  "escenarios": {
+    "soloTitular": [
+      {
+        "tarjeta": "XXXX61",
+        "alias": "3766501077334261",
+        "bin": "376650",
+        "afinidad": "00",
+        "nombrePlastico": "KATTY SANTANA IBARRA",
+        "princiadicio": "P",
+        "cuenta": "1077334",
+        "cliente": "2428917"
+      }
+    ],
+
+    "soloAdicional": [
+      {
+        "tarjeta": "XXXX61",
+        "alias": "3766501077334261",
+        "bin": "376650",
+        "afinidad": "00",
+        "nombrePlastico": "KATTY SANTANA IBARRA",
+        "princiadicio": "A",
+        "cuenta": "1077334",
+        "cliente": "2428917"
+      }
+    ],
+    "titularYAdicional": [
+      {
+        "tarjeta": "XXXX61",
+        "alias": "3766501077334261",
+        "bin": "376650",
+        "afinidad": "00",
+        "nombrePlastico": "ANDREA SANTANA",
+        "princiadicio": "P",
+        "cuenta": "1077334",
+        "cliente": "2428917"
+      },
+      {
+        "tarjeta": "XXXX65",
+        "alias": "3766501077334665",
+        "bin": "376650",
+        "afinidad": "00",
+        "nombrePlastico": "KATTY SANTANA IBARRA",
+        "princiadicio": "A",
+        "cuenta": "1077334",
+        "cliente": "2428917"
+      }
+    ],
+    "variasAdicionales": [
+      {
+        "tarjeta": "XXXX61",
+        "alias": "3766501077334261",
+        "bin": "376650",
+        "afinidad": "00",
+        "nombrePlastico": "KATTY SANTANA IBARRA",
+        "princiadicio": "P",
+        "cuenta": "1077334",
+        "cliente": "2428917"
+      },
+      {
+        "tarjeta": "XXXX65",
+        "alias": "3766501077334665",
+        "bin": "376650",
+        "afinidad": "00",
+        "nombrePlastico": "PATTY SANTANA IBARRA",
+        "princiadicio": "A",
+        "cuenta": "1077334",
+        "cliente": "2428917"
+      },
+      {
+        "tarjeta": "XXXX89",
+        "alias": "3766501077334989",
+        "bin": "376650",
+        "afinidad": "00",
+        "nombrePlastico": "NARCISA SANTANA IBARRA",
+        "princiadicio": "A",
+        "cuenta": "1077334",
+        "cliente": "2428917"
+      }
+    ]
+  }
+}

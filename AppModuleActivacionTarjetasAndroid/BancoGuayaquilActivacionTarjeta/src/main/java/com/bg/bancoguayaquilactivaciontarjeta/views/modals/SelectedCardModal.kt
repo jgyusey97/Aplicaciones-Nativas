@@ -19,7 +19,7 @@ data class CardData(
     val date: String,
     val imageUrl: String? = null,
     val imageRes: Int? = null,
-    val mode: CardItemMode = CardItemMode.DEFAULT
+
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +33,8 @@ fun SelectedCardModal(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var pendientCards =0
 
+    var mode: CardItemMode = CardItemMode.DEFAULT
+
     if (primaryCard != null) {
         pendientCards =1
     }
@@ -45,7 +47,7 @@ fun SelectedCardModal(
             containerColor = BancoTheme.colors.background,
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
         ) {
-
+            var blockAditionals by remember { mutableStateOf(false) }
             Surface(
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
                 // tonalElevation = 2.dp,
@@ -66,7 +68,7 @@ fun SelectedCardModal(
 
                             ) {
                             Text(
-                                text = "Portal de activación",
+                                text = "Activación de tarjetas",
                                 style = BancoTheme.typography.headingLarge
                             )
                             CloseCircleButton(onClick = onClose)
@@ -97,6 +99,11 @@ fun SelectedCardModal(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         primaryCard?.let { card ->
+
+                            if (aditionalCards.isNotEmpty()) {
+                                mode  = CardItemMode.CHECKABLE
+                            }
+
                             Text(
                                 text = "TARJETA TITULAR",
                                 color = BancoTheme.colors.title4,
@@ -109,21 +116,32 @@ fun SelectedCardModal(
                             PendingCardItem(
                                 cardNumber = card.number,
                                 owner = card.owner,
-                                requestedDate = card.date,
+
                                 imageUrl = card.imageUrl,
                                 imageRes = card.imageRes,
-                                mode = card.mode
+                                mode = mode
                             )
                         }
 
                         if (aditionalCards.isNotEmpty()) {
-                            HorizontalDivider(
-                                color = Color(0xFFE0E0E0),
-                                thickness = 1.dp,
-                                modifier = Modifier.padding(vertical = 4.dp)
-                            )
 
-                            Spacer(modifier = Modifier.height(12.dp))
+
+                            if(primaryCard!=null){
+
+                                HorizontalDivider(
+                                    color = Color(0xFFE0E0E0),
+                                    thickness = 1.dp,
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                )
+
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                mode =CardItemMode.LOCKED
+
+                            }else {
+
+                                mode =CardItemMode.CHECKABLE
+                            }
 
                             Text(
                                 text = "TARJETAS ADICIONALES",
@@ -146,7 +164,7 @@ fun SelectedCardModal(
                                             requestedDate = card.date,
                                             imageUrl = card.imageUrl,
                                             imageRes = card.imageRes,
-                                            mode = card.mode
+                                            mode = mode
                                         )
 
                                         if (index < aditionalCards.lastIndex) {
