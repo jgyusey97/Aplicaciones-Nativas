@@ -29,7 +29,7 @@ fun InfoMessageBanner(
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.alert), // Usa el ícono azul de info
+            painter = painterResource(id = R.drawable.information), // Usa el ícono azul de info
             contentDescription = "Información",
             tint = Color(0xFF005EE0),
             modifier = Modifier.size(20.dp)
@@ -39,7 +39,7 @@ fun InfoMessageBanner(
 
         Text(
             text = message,
-            style = BancoTheme.typography.body,
+            style = BancoTheme.typography.message,
             color = BancoTheme.colors.title
         )
     }

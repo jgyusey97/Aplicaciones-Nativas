@@ -1,4 +1,4 @@
-package com.bg.bancoguayaquilactivaciontarjeta.navigation
+package com.bg.bancoguayaquilactivaciontarjeta.models
 
 
 enum class ActivationStep {

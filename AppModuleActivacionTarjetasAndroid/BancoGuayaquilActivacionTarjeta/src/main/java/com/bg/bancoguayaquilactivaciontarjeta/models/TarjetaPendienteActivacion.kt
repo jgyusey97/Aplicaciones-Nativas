@@ -11,7 +11,9 @@ data class TarjetaPendienteActivacion(
     val nombrePlastico: String,
     val princiadicio: String, // "P" o "A"
     val cuenta: String,
-    val cliente: String
+    val cliente: String,
+    val imagenUrl:String,
+    val fechApertura:String
 )
 
 data class EscenariosPendientesActivacion(

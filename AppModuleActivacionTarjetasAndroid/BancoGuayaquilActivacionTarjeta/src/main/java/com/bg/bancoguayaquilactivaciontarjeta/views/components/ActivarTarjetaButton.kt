@@ -1,7 +1,7 @@
 // Estructura inicial del módulo activaciontarjeta
 
 package com.bg.bancoguayaquilactivaciontarjeta
-import android.content.Intent
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,43 +14,38 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
-import com.bg.bancoguayaquilactivaciontarjeta.navigation.ActivationFlowHost
+import androidx.lifecycle.viewmodel.compose.viewModel
 
-import com.bg.bancoguayaquilactivaciontarjeta.navigation.ActivationStep
-import com.bg.bancoguayaquilactivaciontarjeta.viewmodel.FlowControllerViewModel
+import com.bg.bancoguayaquilactivaciontarjeta.navigation.ActivationFlowHost
+import com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel.FlowControllerViewModel
+
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
 
 @Composable
-fun ActivarTarjetaButton() {
+fun ActivarTarjetaButton(viewModel: FlowControllerViewModel = viewModel()) {
 
-    var tarjetasPendientes by remember { mutableStateOf(0) }
+    val state by viewModel.state.collectAsState()
+    var showFlow by remember { mutableStateOf(false) }
 
-    // Llamada rápida a la consulta de tarjetas pendientes
+
+    // Carga automática de tarjetas cuando aparece
     LaunchedEffect(Unit) {
-        tarjetasPendientes = consultarTarjetasPendientes()
+        viewModel.cargarTarjetas("variasAdicionales")
     }
 
-    ActivarTarjeta(
-            tarjetasPendientes = tarjetasPendientes,
-
-
+    BancoWrapper {
+        ActivarTarjeta(
+            tarjetasPendientes = state.tarjetas.size,
         )
 
+    }
+
 
 }
 
-private fun consultarTarjetasPendientes(): Int {
-    // Aquí puedes reemplazarlo con lógica real más adelante
-    return 1 // Simulación de 2 tarjetas por activar
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,91 +55,85 @@ fun ActivarTarjeta(
 ) {
     var showModal by remember { mutableStateOf(false) }
     val showFlow = remember { mutableStateOf(false) }
-    BancoWrapper {
-        Card(
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = BancoTheme.colors.background2
+        ),
+
+        onClick = {
+
+            showFlow.value = true
+
+        }
+
+    ) {
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = BancoTheme.colors.background2
-            ),
-
-            onClick = {
-
-                showFlow.value = true
-
-
-            }
-
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(modifier = Modifier.size(48.dp)) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.card),
-                        contentDescription = "Icono de tarjeta",
+            Box(modifier = Modifier.size(48.dp)) {
+                Icon(
+                    painter = painterResource(id = R.drawable.card),
+                    contentDescription = "Icono de tarjeta",
+                    modifier = Modifier
+                        .size(48.dp)
+                        .align(Alignment.Center),
+                    tint = Color.Black
+                )
+                if (tarjetasPendientes > 0) {
+                    Box(
                         modifier = Modifier
-                            .size(48.dp)
-                            .align(Alignment.Center),
-                        tint = Color.Black
-                    )
-                    if (tarjetasPendientes > 0) {
-                        Box(
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFF4CAF50))
-                                .align(Alignment.TopEnd),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = tarjetasPendientes.toString(),
-                                fontSize = 12.sp,
-                                color = Color.White
-                            )
-                        }
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF4CAF50))
+                            .align(Alignment.TopEnd),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = tarjetasPendientes.toString(),
+                            fontSize = 12.sp,
+                            color = Color.White
+                        )
                     }
                 }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Activar tarjeta",
-
-                        fontWeight = FontWeight.Bold,
-//                        color = Color(0xFF212121),
-                         style = BancoTheme.typography.headingMedium
-                    )
-                    Text(
-                        text = "Activa tus tarjetas y empieza a disfrutar de tus beneficios",
-                        fontSize = 12.sp,
-                        lineHeight = 15.sp,
-
-                        style =  BancoTheme.typography.body,
-                       color = BancoTheme.colors.body
-                    )
-                }
-
             }
-        }
-        if (showFlow.value) {
-            ActivationFlowHost(onCloseFlow = {
-                showFlow.value = false
-            })
-        }
 
-        // ActivationFlowHost(viewModel = flowViewModel)
+            Spacer(modifier = Modifier.width(16.dp))
 
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Activar tarjeta",
+
+                    fontWeight = FontWeight.Bold,
+//                        color = Color(0xFF212121),
+                    style = BancoTheme.typography.headingMedium
+                )
+                Text(
+                    text = "Activa tus tarjetas y empieza a disfrutar de tus beneficios",
+                    fontSize = 12.sp,
+                    lineHeight = 15.sp,
+
+                    style = BancoTheme.typography.body,
+                    color = BancoTheme.colors.body
+                )
+            }
+
+        }
+    }
+    if (showFlow.value) {
+        ActivationFlowHost(onCloseFlow = {
+            showFlow.value = false
+        })
     }
 
-
-
+    // ActivationFlowHost(viewModel = flowViewModel)
 
 
 }

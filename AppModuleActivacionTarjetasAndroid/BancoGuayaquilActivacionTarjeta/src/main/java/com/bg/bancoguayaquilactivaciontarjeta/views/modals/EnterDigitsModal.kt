@@ -15,10 +15,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.*
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
 import com.bg.bancoguayaquilactivaciontarjeta.R
+import com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel.FlowControllerViewModel
 import org.w3c.dom.Text
 
 data class CarData(
@@ -33,12 +36,19 @@ data class CarData(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterDigitsModal(
-    aditionalCards: List<CardData> = emptyList(),
-    primaryCard: CardData? = null,
+    viewModel: FlowControllerViewModel = viewModel(),
     onClose: () -> Unit,
     onContinue: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val state by viewModel.state.collectAsState()
+    val primaryCard = state.seleccionada
+
+    val aditionalCards = state.adicionales
+
+
+    var input by remember { mutableStateOf("") }
     var text by remember { mutableStateOf("") }
     BancoWrapper {
 
@@ -109,25 +119,19 @@ fun EnterDigitsModal(
                                     append(" de tu\n")
                                     append("tarjeta titular")
                                 },
+
                                 color = BancoTheme.colors.title,
                                 style = BancoTheme.typography.headingMedium,
+                                fontSize = 19.sp    ,
                                 modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 14.dp)
                             )
 
                             Spacer(modifier = Modifier.height(12.dp))
-                            /*
-                            InfoMessageBanner(
-                                message = "Para activar tu tarjeta adicional, necesitamos los datos de la tarjeta titular"
-                            )
-                            */
 
                             PendingCardItem(
-                                cardNumber = card.number,
-                                owner = card.owner,
-                                requestedDate = card.date,
-                                imageUrl = card.imageUrl,
-                                imageRes = card.imageRes,
-
+                                cardNumber = card.tarjeta,
+                                owner = card.nombrePlastico,
+                                imageUrl = card.imagenUrl
                             )
                         }
 
@@ -186,7 +190,7 @@ fun EnterDigitsModal(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             modifier = Modifier
                                 .padding(bottom = 8.dp)
-                                .align(Alignment.CenterHorizontally)
+                                .align(Alignment.End)
                         ) {
                             ActionButton(
                                 text = "Salir",

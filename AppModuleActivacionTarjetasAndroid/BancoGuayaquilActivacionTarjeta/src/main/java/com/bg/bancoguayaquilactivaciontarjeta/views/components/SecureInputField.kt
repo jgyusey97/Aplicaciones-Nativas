@@ -56,9 +56,9 @@ fun SecureInputField(
 ) {
     var isVisible by rememberSaveable { mutableStateOf(false) }
 
-    val backgroundColor = if (isError) Color(0xFFFFF3F3) else Color(0xFFF3F3F3)
-    val borderColor = if (isError) Color.Red else Color.Transparent
-    val contentColor = if (isError) Color.Red else Color.Black
+    val backgroundColor = if (isError) BancoTheme.colors.errorSoft else BancoTheme.colors.body3
+    val borderColor = if (isError) BancoTheme.colors.error else Color.Transparent
+        val contentColor = if (isError) BancoTheme.colors.error else Color.Black
     val placeholderColor = if (isError) Color.Red.copy(alpha = 0.7f) else Color.Gray
 
     Column(modifier = modifier.fillMaxWidth()) {

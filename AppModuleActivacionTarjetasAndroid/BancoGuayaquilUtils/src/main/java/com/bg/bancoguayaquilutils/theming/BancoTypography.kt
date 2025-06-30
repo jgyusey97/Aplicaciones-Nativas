@@ -48,14 +48,21 @@ data class BancoTypography (
 
     ),
 
-
-
     val caption: TextStyle = TextStyle(
         fontFamily = NunitoSans,
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 21.sp
+    ),
+
+    val message: TextStyle = TextStyle(
+        fontFamily = NunitoSans,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 17.sp
     )
+
+
 )
 
 val bancoTypography = BancoTypography()

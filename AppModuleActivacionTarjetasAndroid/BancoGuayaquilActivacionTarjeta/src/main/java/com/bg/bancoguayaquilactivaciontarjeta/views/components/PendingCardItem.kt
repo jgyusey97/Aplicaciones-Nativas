@@ -24,6 +24,7 @@ import com.bg.bancoguayaquilactivaciontarjeta.R
 import com.bg.bancoguayaquilutils.theming.BancoColorScheme
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
+import com.bg.bancoguayaquilutils.theming.extensions.toCapitalize
 
 enum class CardItemMode {
     DEFAULT, CHECKABLE, LOCKED
@@ -115,7 +116,7 @@ fun PendingCardItem(
                     modifier = Modifier.alpha(alpha)
                 )
                 Text(
-                    text = owner,
+                    text = owner.toCapitalize(),
                     color = BancoTheme.colors.body ,
                     style = BancoTheme.typography.body,
 

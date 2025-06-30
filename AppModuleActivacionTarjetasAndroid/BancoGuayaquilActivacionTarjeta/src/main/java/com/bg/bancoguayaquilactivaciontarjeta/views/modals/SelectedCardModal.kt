@@ -8,10 +8,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bg.bancoguayaquilactivaciontarjeta.views.components.*
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
+import com.bg.bancoguayaquilactivaciontarjeta.R
+import com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel.FlowControllerViewModel
 
 data class CardData(
     val number: String,
@@ -25,13 +29,19 @@ data class CardData(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectedCardModal(
-    primaryCard: CardData? = null,
-    aditionalCards: List<CardData> = emptyList(),
+
+    viewModel: FlowControllerViewModel = viewModel(),
     onClose: () -> Unit,
     onContinue: () -> Unit
 ) {
+
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var pendientCards =0
+    val state by viewModel.state.collectAsState()
+    val primaryCard = state.tarjetas.find {it.princiadicio =="P"}
+    val aditionalCards = state.tarjetas.filter { it.princiadicio =="A" }
+
+
 
     var mode: CardItemMode = CardItemMode.DEFAULT
 
@@ -114,11 +124,9 @@ fun SelectedCardModal(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             PendingCardItem(
-                                cardNumber = card.number,
-                                owner = card.owner,
-
-                                imageUrl = card.imageUrl,
-                                imageRes = card.imageRes,
+                                cardNumber = card.tarjeta,
+                                owner = card.nombrePlastico,
+                                imageUrl = card.imagenUrl,
                                 mode = mode
                             )
                         }
@@ -159,26 +167,24 @@ fun SelectedCardModal(
                                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                                     aditionalCards.forEachIndexed { index, card ->
                                         PendingCardItem(
-                                            cardNumber = card.number,
-                                            owner = card.owner,
-                                            requestedDate = card.date,
-                                            imageUrl = card.imageUrl,
-                                            imageRes = card.imageRes,
+                                            cardNumber = card.tarjeta,
+                                            owner = card.nombrePlastico,
+                                            requestedDate = card.fechApertura,
+                                            imageUrl = card.imagenUrl,
                                             mode = mode
                                         )
 
-                                        if (index < aditionalCards.lastIndex) {
+                                        if ( aditionalCards.size>1) {
                                             HorizontalDivider(
                                                 color = Color(0xFFE0E0E0),
                                                 thickness = 1.dp,
                                                 modifier = Modifier.padding(vertical = 4.dp)
                                             )
-                                        }
+                                       }
                                     }
                                 }
                             }
                         }
-
 
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -187,7 +193,7 @@ fun SelectedCardModal(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             modifier = Modifier
                                 .padding(bottom = 8.dp)
-                                .align(Alignment.CenterHorizontally)
+                                .align(Alignment.End)
                         ) {
                             ActionButton(
                                 text = "Salir",
@@ -213,37 +219,6 @@ fun SelectedCardModal(
 
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun PreviewActivationModal() {
-    ActivationModal(
-        primaryCard = CardData(
-            number = "XXXX23",
-            owner = "Carolina Romero",
-            date = "17/07/25",
-            imageRes = R.drawable.avanti_card,
-            mode = CardItemMode.CHECKABLE
-        ),
-        aditionalCards = listOf(
-            CardData(
-                number = "XXXX23",
-                owner = "Carolina Romero",
-                date = "17/07/25",
-                imageRes = R.drawable.avanti_card,
-                mode = CardItemMode.DEFAULT
-            ),
-            CardData(
-                number = "XXXX23",
-                owner = "Carolina Romero",
-                date = "17/07/25",
-                imageRes = R.drawable.avanti_card,
-                mode = CardItemMode.CHECKABLE
-            )
-        ),
-        onClose = {},
-        onContinue = {}
-    )
-}
 
- */
+
+
