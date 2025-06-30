@@ -8,7 +8,7 @@ class ActivacionService {
     private val repository = ActivacionRepository()
 
     suspend fun  getTarjetasPendientes(nombre: String): List<TarjetaPendienteActivacion> {
-        return repository.getTarjetasPendientes(nombre)
+        return repository.getTarjetasPendientes()
     }
 
 
