@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,31 +20,29 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.bg.bancoguayaquilactivaciontarjeta.navigation.ActivationFlowHost
-import com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel.FlowControllerViewModel
+import com.bg.bancoguayaquilactivaciontarjeta.views.FlowControllerViewModel
 
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
+import com.bg.bancoguayaquilactivaciontarjeta.services.ActivacionService
+import com.bg.bancoguayaquilactivaciontarjeta.views.FlowControllerViewModelFactory
+
 
 @Composable
-fun ActivarTarjetaButton(viewModel: FlowControllerViewModel = viewModel()) {
+fun ActivarTarjetaButton() {
+    val context = LocalContext.current
+    val factory = remember { FlowControllerViewModelFactory(context) }
+    val viewModel: FlowControllerViewModel = viewModel(factory = factory)
 
     val state by viewModel.state.collectAsState()
-    var showFlow by remember { mutableStateOf(false) }
 
-
-    // Carga automática de tarjetas cuando aparece
     LaunchedEffect(Unit) {
-        viewModel.cargarTarjetas("variasAdicionales")
+        viewModel.cargarTarjetas("titularYAdicional")
     }
 
     BancoWrapper {
-        ActivarTarjeta(
-            tarjetasPendientes = state.tarjetas.size,
-        )
-
+        ActivarTarjeta(tarjetasPendientes = state.tarjetas.size)
     }
-
-
 }
 
 

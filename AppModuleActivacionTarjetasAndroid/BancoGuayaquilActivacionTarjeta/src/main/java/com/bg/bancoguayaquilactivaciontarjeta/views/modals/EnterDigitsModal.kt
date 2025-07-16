@@ -21,7 +21,7 @@ import com.bg.bancoguayaquilactivaciontarjeta.views.components.*
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
 import com.bg.bancoguayaquilactivaciontarjeta.R
-import com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel.FlowControllerViewModel
+import com.bg.bancoguayaquilactivaciontarjeta.views.FlowControllerViewModel
 import org.w3c.dom.Text
 
 data class CarData(

@@ -6,7 +6,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel.FlowControllerViewModel
+import com.bg.bancoguayaquilactivaciontarjeta.views.FlowControllerViewModel
 import com.bg.bancoguayaquilactivaciontarjeta.views.modals.SelectedCardModal
 import com.bg.bancoguayaquilactivaciontarjeta.views.modals.CardData
 import com.bg.bancoguayaquilactivaciontarjeta.R

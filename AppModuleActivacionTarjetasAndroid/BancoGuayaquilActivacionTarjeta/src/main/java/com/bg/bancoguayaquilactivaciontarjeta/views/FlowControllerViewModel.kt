@@ -1,4 +1,5 @@
-package com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel
+package com.bg.bancoguayaquilactivaciontarjeta.views
+
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -15,7 +15,7 @@ import com.bg.bancoguayaquilactivaciontarjeta.views.components.*
 import com.bg.bancoguayaquilutils.theming.BancoTheme
 import com.bg.bancoguayaquilutils.theming.BancoWrapper
 import com.bg.bancoguayaquilactivaciontarjeta.R
-import com.bg.bancoguayaquilactivaciontarjeta.views.viewmodel.FlowControllerViewModel
+import com.bg.bancoguayaquilactivaciontarjeta.views.FlowControllerViewModel
 
 data class CardData(
     val number: String,
@@ -126,7 +126,7 @@ fun SelectedCardModal(
                             PendingCardItem(
                                 cardNumber = card.tarjeta,
                                 owner = card.nombrePlastico,
-                                imageUrl = card.imagenUrl,
+                                imageRes = R.drawable.avanti_card,
                                 mode = mode
                             )
                         }
@@ -170,7 +170,7 @@ fun SelectedCardModal(
                                             cardNumber = card.tarjeta,
                                             owner = card.nombrePlastico,
                                             requestedDate = card.fechApertura,
-                                            imageUrl = card.imagenUrl,
+                                            imageRes = R.drawable.avanti_card,
                                             mode = mode
                                         )
 
